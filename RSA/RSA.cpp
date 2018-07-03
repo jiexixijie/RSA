@@ -10,6 +10,7 @@
 
 using namespace std;
 
+int exGcd(int a, int b, int &x, int &y);
 //n越大确定为质数的可能性越大 
 bool Is_Valid_Prime(unsigned long prime, int counts = 5);
 //***************************************************************************
@@ -26,13 +27,11 @@ bool Miller_Rabin(unsigned long N, unsigned long a, unsigned long s, unsigned lo
 
 
 int _tmain(int argc, _TCHAR* argv[])
-{	
-	if (Is_Valid_Prime(37)){
-		printf("prime\n");
-	}
-	unsigned long A = 0xFFFFFFFE;
-	unsigned long B = 0xFFFFFFFE;
-	unsigned __int64 C = A*B;
+{
+	int x, y;
+	std::cout << exGcd(8, 9, x, y) << endl;
+	std::cout << x << y;
+	
 	system("pause");
 	return 0;
 }
@@ -74,11 +73,27 @@ bool Miller_Rabin(unsigned long N, unsigned long a, unsigned long s, unsigned lo
 	//a^(2^r*d)modN = −1（和a^(2^r*d)modN = N−1
 	for (int i = 0; i < s; i++){
 		result = powl(2, i)*d;
-		result=(unsigned long)powl(a, result);
+		result = (unsigned long)powl(a, result);
 		result = result%N;
 		if (result == N - 1){
 			return false;
 		}
 	}
 	return true;
+}
+
+int exGcd(int a, int b, int &x, int &y)
+{
+	if (b == 0)
+	{
+		x = 1;
+		y = 0;
+		return a;
+	}
+	int r = exGcd(b, a % b, x, y);
+	int t = x;
+	x = y;
+	y = t - a / b * y;
+
+	return r;
 }
